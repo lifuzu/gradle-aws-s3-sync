@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
     }
 }
 
@@ -11,14 +11,15 @@ import groovyx.net.http.HTTPBuilder
 import static groovyx.net.http.ContentType.*
 import static groovyx.net.http.Method.*
 
-version = "0.7"
+version = "0.7.1"
 group = "com.monochromeroad.gradle-plugins"
 
 apply plugin: "groovy"
 apply plugin: 'maven-publish'
-apply plugin: "bintray"
+apply plugin: "com.jfrog.bintray"
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
