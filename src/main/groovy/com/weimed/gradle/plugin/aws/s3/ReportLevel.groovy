@@ -1,9 +1,9 @@
-package com.monochromeroad.gradle.plugin.aws.s3
+package com.weimed.gradle.plugin.aws.s3
 
 /**
  * Options for how much report information will be printed.
  *
- * @author Masatoshi Hayashi
+ * @author
  */
 public enum ReportLevel {
 

@@ -1,9 +1,9 @@
-package com.monochromeroad.gradle.plugin.aws.s3
+package com.weimed.gradle.plugin.aws.s3
 
 /**
  * Access Control List (ACL) for Amazon S3
  *
- * @author Masatoshi Hayashi
+ * @author
  */
 public enum ACL {
 

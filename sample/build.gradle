@@ -3,11 +3,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.monochromeroad.gradle-plugins:gradle-aws-s3-sync:0.5"
+        classpath "com.weimed.gradle-plugins:gradle-aws-s3-sync:0.5"
     }
 }
 
-import com.monochromeroad.gradle.plugin.aws.s3.S3Sync
+import com.weimed.gradle.plugin.aws.s3.S3Sync
 
 ext {
     aws = [accessKey: awsAccessKey, secretKey: awsSecretKey]
@@ -20,7 +20,7 @@ task deploy(type: S3Sync){
     secretKey aws.secretKey
 
     configFile "synchronizer.properties"
-    acl com.monochromeroad.gradle.plugin.aws.s3.ACL.PublicRead
+    acl com.weimed.gradle.plugin.aws.s3.ACL.PublicRead
 
     from "site/"
     into "gradle-ja"

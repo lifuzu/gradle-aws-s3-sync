@@ -1,4 +1,4 @@
-package com.monochromeroad.gradle.plugin.aws.s3
+package com.weimed.gradle.plugin.aws.s3
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -12,7 +12,7 @@ import org.jets3t.service.Constants
 /**
  * Main task class for the plugin
  *
- * @author Masatoshi Hayashi
+ * @author
  */
 class S3Sync extends DefaultTask {
 
@@ -98,7 +98,7 @@ class S3Sync extends DefaultTask {
         }
         else if (action == 'DOWN'){
             project.file(destination).mkdirs()
-            dest = [new File(destination)]
+            def dest = [new File(destination)]
             client.run(originalSourcePath, dest,
                         action,
                         properties.getStringProperty("password", null), aclString,
