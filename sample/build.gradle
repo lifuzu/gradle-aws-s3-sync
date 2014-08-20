@@ -3,11 +3,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.weimed.gradle-plugins:gradle-aws-s3-sync:0.5"
+        classpath "com.cloudcar.gradle-plugins:gradle-aws-s3-sync:1.+"
     }
 }
 
-import com.weimed.gradle.plugin.aws.s3.S3Sync
+import com.cloudcar.gradle.plugin.aws.s3.*
 
 ext {
     aws = [accessKey: awsAccessKey, secretKey: awsSecretKey]
@@ -20,7 +20,7 @@ task deploy(type: S3Sync){
     secretKey aws.secretKey
 
     configFile "synchronizer.properties"
-    acl com.weimed.gradle.plugin.aws.s3.ACL.PublicRead
+    acl com.cloudcar.gradle.plugin.aws.s3.ACL.PublicRead
 
     from "site/"
     into "gradle-ja"

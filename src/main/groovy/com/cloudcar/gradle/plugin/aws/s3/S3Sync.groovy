@@ -1,4 +1,4 @@
-package com.weimed.gradle.plugin.aws.s3
+package com.cloudcar.gradle.plugin.aws.s3
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction

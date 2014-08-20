@@ -1,4 +1,4 @@
-package com.weimed.gradle.plugin.aws.s3
+package com.cloudcar.gradle.plugin.aws.s3
 
 /**
  * Access Control List (ACL) for Amazon S3

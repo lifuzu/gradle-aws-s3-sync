@@ -1,4 +1,4 @@
-package com.weimed.gradle.plugin.aws.s3
+package com.cloudcar.gradle.plugin.aws.s3
 
 /**
  * Options for how much report information will be printed.

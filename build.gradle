@@ -11,8 +11,8 @@ import groovyx.net.http.HTTPBuilder
 import static groovyx.net.http.ContentType.*
 import static groovyx.net.http.Method.*
 
-version = "0.7.2"
-group = "com.weimed.gradle-plugins"
+version = "1.0.0"
+group = "com.cloudcar.gradle-plugins"
 
 apply plugin: "groovy"
 apply plugin: 'maven-publish'
@@ -59,7 +59,7 @@ jar.dependsOn sourcesJar, javadocJar, groovydocJar
 
 final pomConfig = {
     packaging "jar"
-    name "Gradle Amazon S3 Sync Plugin"
+    name "Gradle Amazon S3 Plugin"
     url ""
     licenses {
         license {
@@ -80,7 +80,7 @@ publishing {
 
             pom.withXml {
                 final root = asNode()
-                root.appendNode('description', 'The gradle task for synchronizing a local directory with a AWS S3 bucket.')
+                root.appendNode('description', 'The gradle task for synchronizing/deleting/purging a local file/directory with a AWS S3 bucket.')
                 root.children().last() + pomConfig
             }
         }

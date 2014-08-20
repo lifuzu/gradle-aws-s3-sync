@@ -1,12 +1,13 @@
-package com.weimed.gradle.plugin.aws.s3
+package com.cloudcar.gradle.plugin.aws.s3
 
-import org.jets3t.service.model.S3Object
 import org.gradle.api.DefaultTask
 import org.gradle.api.PathValidation
 import org.gradle.api.tasks.TaskAction
 import org.jets3t.service.Constants
 import org.jets3t.service.Jets3tProperties
+import org.jets3t.service.S3ServiceException
 import org.jets3t.service.impl.rest.httpclient.RestS3Service
+import org.jets3t.service.model.S3Object
 import org.jets3t.service.security.AWSCredentials
 
 /**
@@ -14,21 +15,13 @@ import org.jets3t.service.security.AWSCredentials
  *
  * @author
  */
-class S3Delete extends DefaultTask {
+class S3Purge extends DefaultTask {
 
     def accessKey
 
     def secretKey
 
-    def quiet
-
-    def noProgress
-
-    def force
-
     def configFile
-
-    def bucket
 
     ACL acl = ACL.Private
 
@@ -45,26 +38,25 @@ class S3Delete extends DefaultTask {
         sourceDir = project.file(sourcePath)
     }
 
-    void delete(destinationPath) {
-        destination = destinationPath.toString()
-    }
-
     @TaskAction
-    def delete() {
+    def purge() {
         def awsCredentials = new AWSCredentials(accessKey, secretKey)
         def s3Service = new RestS3Service(awsCredentials)
 
         //Jets3tProperties properties = loadProperties()
 
-        println(destination)
         println(originalSourcePath)
-        if (destination) {
-            S3Object object = new S3Object(destination)
-            s3Service.deleteObject(originalSourcePath, object.getKey())
-        } else {
-            logger.error("No file found as destination.")
+        try {
+            S3Object[] objects = s3Service.listObjects(originalSourcePath);
+            for (int i = 0; i < objects.length; i++) {
+                s3Service.deleteObject(originalSourcePath, objects[i].getKey());
+            }
+        } catch (S3ServiceException e) {
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            }
+            throw new Exception(e);
         }
-
     }
 
     Jets3tProperties loadProperties() {

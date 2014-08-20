@@ -1,4 +1,4 @@
-package com.weimed.gradle.plugin.aws.s3
+package com.cloudcar.gradle.plugin.aws.s3
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.PathValidation
@@ -10,12 +10,14 @@ import org.jets3t.service.impl.rest.httpclient.RestS3Service
 import org.jets3t.service.model.S3Object
 import org.jets3t.service.security.AWSCredentials
 
+import com.amazonaws.services.s3.model.ListObjectsRequest
+
 /**
  * Main task class for the plugin
  *
  * @author
  */
-class S3Purge extends DefaultTask {
+class S3List extends DefaultTask {
 
     def accessKey
 
@@ -33,23 +35,44 @@ class S3Purge extends DefaultTask {
 
     private String destination
 
+    private String delimiter = '/'
+
     void from(sourcePath) {
         originalSourcePath = sourcePath
         sourceDir = project.file(sourcePath)
     }
 
+    void into(destinationPath) {
+        destination = destinationPath.toString()
+    }
+
     @TaskAction
-    def purge() {
+    def list() {
         def awsCredentials = new AWSCredentials(accessKey, secretKey)
         def s3Service = new RestS3Service(awsCredentials)
 
         //Jets3tProperties properties = loadProperties()
 
         println(originalSourcePath)
+
         try {
-            S3Object[] objects = s3Service.listObjects(originalSourcePath);
+            S3Object[] objects;
+            if (destination) {
+                if (!destination.endsWith(delimiter)) destination += delimiter
+                println(destination)
+                ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                        .withBucketName(originalSourcePath).withPrefix(destination)
+                        .withDelimiter(delimiter);
+                objects = s3Service.listObjects(listObjectsRequest);
+                for ( S3Object object in objects.getCommonPrefixes() ) {
+                    println(object.getKey() + " (" + object.getContentLength() + " bytes)")
+                }
+            } else {
+                objects = s3Service.listObjects(originalSourcePath);
+            }
+
             for (int i = 0; i < objects.length; i++) {
-                s3Service.deleteObject(originalSourcePath, objects[i].getKey());
+                println(objects[i].getKey() + " (" + objects[i].getContentLength() + " bytes)");
             }
         } catch (S3ServiceException e) {
             if (e.getCause() instanceof IOException) {
