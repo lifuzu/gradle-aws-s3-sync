@@ -85,6 +85,19 @@ publishing {
             }
         }
     }
+    repositories {
+        maven {
+            if(version.endsWith('-SNAPSHOT')){
+                url REPO_DEPLOYMENT_URL + "/snapshots"
+            } else {
+                url REPO_DEPLOYMENT_URL + "/releases"
+            }
+            credentials {
+                username REPO_DEPLOYMENT_USERNAME
+                password REPO_DEPLOYMENT_PASSWORD
+            }
+        }
+    }
 }
 
 
