@@ -80,6 +80,8 @@ class S3Sync extends DefaultTask {
         boolean isBatchMode = batchMode == true;
         String aclString = acl.toString()
 
+        project.file(".cache").mkdirs()
+
         Synchronize client = new Synchronize(
                 s3Service, doAction, isQuiet, isNoProgress, isForce, isKeepFiles, isNoDelete,
                 isMoveEnabled, isBatchMode, isGzipEnabled, isEncryptionEnabled,

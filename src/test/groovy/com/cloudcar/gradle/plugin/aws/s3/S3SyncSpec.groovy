@@ -4,7 +4,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.api.Project
 
 /**
- * @author Masatoshi Hayashi
+ * @author 
  */
 class S3SyncSpec extends spock.lang.Specification {
 
@@ -21,7 +21,7 @@ class S3SyncSpec extends spock.lang.Specification {
         def prop = syncTask.loadProperties()
 
         then:
-        prop.getStringProperty("s3service.default-bucket-location", "default") == "Tokyo"
+        prop.getStringProperty("s3service.default-bucket-location", "default") == "us-west-2"
     }
 
 }

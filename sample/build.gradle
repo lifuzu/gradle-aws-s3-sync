@@ -1,9 +1,12 @@
+// Gradle Script
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
     }
+
     dependencies {
-        classpath "com.cloudcar.gradle-plugins:gradle-aws-s3-sync:1.+"
+        classpath "com.cloudcar.gradle-plugins:gradle-s3-plugin:1.+"
     }
 }
 
@@ -11,18 +14,74 @@ import com.cloudcar.gradle.plugin.aws.s3.*
 
 ext {
     aws = [accessKey: awsAccessKey, secretKey: awsSecretKey]
+    s3 = [bucket: "ccbuild", destination: "hello.txt"]
+    local = [directory: "pool"]
 }
 
-task deploy(type: S3Sync){
-    description = "Deploys the document on the site."
+task s3upload(type: S3Sync){
+    description = "Deploys artifacts on a s3 bucket."
 
     accessKey aws.accessKey
     secretKey aws.secretKey
 
     configFile "synchronizer.properties"
-    acl com.cloudcar.gradle.plugin.aws.s3.ACL.PublicRead
+    keepFiles = true
 
-    from "site/"
-    into "gradle-ja"
+    from local.directory
+    into s3.bucket
 }
 
+task s3download(type: S3Sync){
+    description = "Fetchs artifacts from a s3 bucket."
+
+    accessKey aws.accessKey
+    secretKey aws.secretKey
+
+    configFile "synchronizer.properties"
+    keepFiles = true
+    action = "DOWN"
+
+    from s3.bucket
+    into local.directory
+}
+
+task s3delete(type: S3Delete) {
+    description = "Deletes artifact from a s3 bucket."
+
+    accessKey aws.accessKey
+    secretKey aws.secretKey
+
+    configFile "synchronizer.properties"
+
+    from s3.bucket
+    if (project.hasProperty("destination")) {
+        delete project.getProperty("destination")
+    } else {
+        delete s3.destination
+    }
+}
+
+task s3purge(type: S3Purge) {
+    description = "Purges all artifacts from a s3 bucket."
+
+    accessKey aws.accessKey
+    secretKey aws.secretKey
+
+    configFile "synchronizer.properties"
+
+    from s3.bucket
+}
+
+task s3list(type: S3List) {
+    description = "Lists all artifacts from a s3 bucket."
+
+    accessKey aws.accessKey
+    secretKey aws.secretKey
+
+    configFile "synchronizer.properties"
+
+    from s3.bucket
+    if (project.hasProperty("destination")) {
+        into project.getProperty("destination")
+    }
+}
